@@ -5,7 +5,7 @@
   "author": "Temperature-logger team",
   "main": "server.js",
   "scripts": {
-    "start-dev-dockerr": "nodemon start.js",
+    "start-dev-docker": "nodemon start.js",
     "start-dev": "nodemon -r dotenv/config start.js",
     "start": "node start.js"
   },
