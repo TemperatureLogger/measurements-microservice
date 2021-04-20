@@ -1,0 +1,53 @@
+version: "3.7"
+
+services:
+  measurements-service:
+    build: '../'
+    ports:
+      - "3000:80"
+    environment:
+      NODE_ENV: development
+      PGHOST: db
+      PGUSER: ${PGUSER}
+      PGPASSWORD: ${PGPASSWORD}
+      PGPORT: 5432
+      PGDATABASE: ${PGDATABASE}
+    volumes:
+      - ../:/usr/src/app  
+    command: ["npm", "run", "start-dev-docker"]
+    networks:
+      - measurements_network
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: ${PGUSER}
+      POSTGRES_PASSWORD: ${PGPASSWORD}
+      POSTGRES_DB: ${PGDATABASE}
+      TZ: Europe/Bucharest
+      PGTZ: Europe/Bucharest
+    ports:
+      - ${PGPORT}:5432
+    volumes:
+      - measurements-database:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - measurements_network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - "30001:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: test
+      PGADMIN_DEFAULT_PASSWORD: test
+    logging:
+      driver: none
+    networks:
+      - measurements_network
+
+volumes:
+  measurements-database:
+
+networks:
+  measurements_network:
