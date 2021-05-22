@@ -6,20 +6,24 @@ const morgan = require('morgan');
 const helmet = require('helmet');
 // pachet folosit pentru trimiterea de erori
 const createError = require('http-errors');
- 
+// pachet folosit pentru a putea face requesturi cross domain
+var cors = require('cors');
+
 // In spate, de fapt, face un try {} catch {} pe fiecare ruta definita de noi
 // si apeleaza next() in cazul in care intalneste o eroare. 
 // Este util pentru a nu scrie try...catch de fiecare data
 require('express-async-errors'); 
 // pachet folosit pentru injectarea timpului in momenul in care se da console.log()
 require('log-timestamp');
- 
+
 // fisierul (scris de noi) care are configurate toate rutele
 const routes = require('./routes.js'); 
  
 // instantierea serverului efectiv
 const app = express();
- 
+
+app.use(cors());
+
 // adaugarea primului middleware, cel oferit de pachetul helmet
 app.use(helmet());
 
