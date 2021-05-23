@@ -15,11 +15,11 @@ const getAll = async () => {
     return temperatures;
 };
 
-const getById = async (id) => {
+const getById = async (time) => {
     console.info('Getting temperature with ${id}');
 
     const measurements = await query('SELECT * FROM measurements \
-                                        WHERE id = $1', [id]);
+                                        WHERE time = $1', [time]);
     // din start.js o sa primesc un rows, care este un vector
     // daca lungimea vectorului o sa fie < 1 ==> valoarea nu exista
     if (measurements.length !== 1) {
@@ -34,27 +34,27 @@ const add = async (time, temperature, humidity) => {
 
     try {
         const measurements = await query (`INSERT INTO measurements \
-                                            (temperature, humidity) \
-                                            VALUES ($1, $2) RETURNING id`, 
-                                            [temperature, humidity]);
-        return measurements[0].id;
+                                            (time, temperature, humidity) \
+                                            VALUES ($1, $2, $3) RETURNING time`, 
+                                            [time, temperature, humidity]);
+        return measurements[0].time;
     } catch (e) {
         throw e;
     }
 
 };
 
-const update = async (id, time, temperature, humidity) => {
+const update = async (time, temperature, humidity) => {
     console.info("Updating temperature");
 
     await query(`UPDATE measurements SET temperature=$1 \
-                WHERE id=$3`, [temperature, humidity, id]);
+                WHERE time=$3`, [temperature, humidity, time]);
 };
 
-const remove = async (id) => {
-    console.info('Deleting temperature with ${id}');
+const remove = async (time) => {
+    console.info('Deleting temperature with ${time}');
 
-    await query(`DELETE FROM measurements WHERE id=$1`, [id]);
+    await query(`DELETE FROM measurements WHERE time=$1`, [time]);
 };
 
 module.exports = {

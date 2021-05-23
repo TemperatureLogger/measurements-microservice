@@ -24,11 +24,11 @@ Router.get('/:id', async (req, res) => {
 
     // preiau parametrul id din parametrii de cerere
     const {
-        id
+        time
     } = req.params;
 
     // apelez functia din servicii
-    const measurement = await getById(id);
+    const measurement = await getById(time);
 
     // returnez obiectul sub forma de json
     res.json(measurement);
@@ -41,7 +41,7 @@ Router.get('/', async (req, res) => {
 
     // preiau parametrul id din parametrii de cerere
     const {
-        id
+        time
     } = req.params;
 
     // apelez functia din servicii
@@ -58,8 +58,8 @@ Router.post('/', async (req, res) => {
 
     // express imi prelucreaza sirul si mi-l pune pe tot in body
     // din body eu extrag datele de care am nevoie
-    // pentru inceput lucrez doar cu temperatura
     const {
+        time,
         temperature,
         humidity
     } = req.body;
@@ -69,39 +69,38 @@ Router.post('/', async (req, res) => {
     //     throw new ServerError("Temperature need to be a number", 400);
     // }
 
-    const id = await add(undefined,
+    const id = await add(parseFloat(time),
                         parseFloat(temperature), 
                         parseFloat(humidity));
 
     // returnez obiectul sub forma de json
-    res.json({id, temperature, humidity});
+    res.json({time, temperature, humidity});
 
 });
 
 Router.put('/:id', async (req, res) => {
 
     const {
-        id
+        time
     } = req.params;
 
     const {
-        time,
         temperature,
         humidity
     } = req.body;
     
-    await update(id, time, temperature, humidity);
+    await update(time, temperature, humidity);
 
-    res.json({id, time, temperature, humidity});
+    res.json({time, temperature, humidity});
 });
 
 Router.delete('/:id', async (req, res) => {
 
     const {
-        id
+        time
     } = req.params;
 
-    await remove(id);
+    await remove(time);
 
     // .end() inchide fluxul de cerere-raspuns
     res.status(200).end();
