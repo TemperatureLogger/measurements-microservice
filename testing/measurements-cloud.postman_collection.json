@@ -1,0 +1,182 @@
+{
+	"info": {
+		"_postman_id": "85936bfa-6096-411f-a12a-fbad3bd3890e",
+		"name": "measurements-cloud",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET ALL",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://157.245.65.94:3000/api/measurements",
+					"protocol": "http",
+					"host": [
+						"157",
+						"245",
+						"65",
+						"94"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"measurements"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET_BY_TIME",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://157.245.65.94:3000/api/measurements/1621840221",
+					"protocol": "http",
+					"host": [
+						"157",
+						"245",
+						"65",
+						"94"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"measurements",
+						"1621840221"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET_CUSTOM",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://157.245.65.94:3000/api/measurements/period/2",
+					"protocol": "http",
+					"host": [
+						"157",
+						"245",
+						"65",
+						"94"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"measurements",
+						"period",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ADD_DATA",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"time\": 1621840230,\n    \"temperature\": 46.053352,\n    \"humidity\": 79.617455,\n    \"serialNumber\":\"995346\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://157.245.65.94:3000/api/measurements",
+					"protocol": "http",
+					"host": [
+						"157",
+						"245",
+						"65",
+						"94"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"measurements"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://157.245.65.94:3000/api/measurements/3",
+					"protocol": "http",
+					"host": [
+						"157",
+						"245",
+						"65",
+						"94"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"measurements",
+						"3"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
