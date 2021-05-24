@@ -6,6 +6,6 @@ Json:
     time,
     temperature,
     humidity,
-    userId
+    serialNumber
 }
 ```
