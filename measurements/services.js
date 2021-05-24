@@ -10,13 +10,13 @@ const { ServerError } = require ('../errors');
 const getAll = async () => {
     console.info('Get all');
 
-    const temperatures = await query('SELECT * from measurements');
+    const measurements = await query('SELECT * from measurements');
 
-    return temperatures;
+    return measurements;
 };
 
 const getById = async (time) => {
-    console.info('Getting temperature with ${id}');
+    console.info(`Getting temperature with ${time}`);
 
     const measurements = await query('SELECT * FROM measurements \
                                         WHERE time = $1', [time]);
@@ -26,22 +26,31 @@ const getById = async (time) => {
         throw new ServerError('This measurement does not exist', 404)
     }
 
-    return temperature[0];
+    return measurements[0];
 };
 
-const add = async (time, temperature, humidity) => {
-    console.info(`Adding measurement ${time, temperature, humidity}`);
+const getCustomMeasurements = async (measurementsNo) => {
+    console.info(`Getting custom number of temperatures ${measurementsNo}`);
+
+    const measurements = await query('SELECT * FROM measurements \
+                                        ORDER BY time DESC \
+                                        LIMIT $1', [measurementsNo]);
+
+    return measurements;
+};
+
+const add = async (time, temperature, humidity, serialNumber) => {
+    console.info(`Adding measurement ${time, temperature, humidity, serialNumber}`);
 
     try {
         const measurements = await query (`INSERT INTO measurements \
-                                            (time, temperature, humidity) \
-                                            VALUES ($1, $2, $3) RETURNING time`, 
-                                            [time, temperature, humidity]);
+                                            (time, temperature, humidity, serialNumber) \
+                                            VALUES ($1, $2, $3, $4) RETURNING time`, 
+                                            [time, temperature, humidity, serialNumber]);
         return measurements[0].time;
     } catch (e) {
         throw e;
     }
-
 };
 
 const update = async (time, temperature, humidity) => {
@@ -60,6 +69,7 @@ const remove = async (time) => {
 module.exports = {
     getAll,
     getById,
+    getCustomMeasurements,
     add,
     update,
     remove

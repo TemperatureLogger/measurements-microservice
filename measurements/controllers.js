@@ -12,6 +12,7 @@ const {
 const {
     getAll,
     getById,
+    getCustomMeasurements,
     add,
     update,
     remove
@@ -20,7 +21,7 @@ const {
 // pentru a creea un CRUD: GET, POST, DELETE, PUT
 // ruta de GET pentru /api/measurements/:id
 // returneaza datele despre masuratoarea cu id-ul respectiv
-Router.get('/:id', async (req, res) => {
+Router.get('/:time', async (req, res) => {
 
     // preiau parametrul id din parametrii de cerere
     const {
@@ -35,7 +36,26 @@ Router.get('/:id', async (req, res) => {
 
 });
 
-// ruta de GET pentru /api/measurements/:id
+
+// ruta de GET pentru /api/measurements/period/:no
+// returneaza datele despre masuratoarea cu id-ul respectiv
+Router.get('/period/:measurementsNo', async (req, res) => {
+
+    // preiau parametrul id din parametrii de cerere
+    const {
+        measurementsNo
+    } = req.params;
+
+    // apelez functia din servicii
+    const measurement = await getCustomMeasurements(measurementsNo);
+
+    // returnez obiectul sub forma de json
+    res.json(measurement);
+
+});
+
+
+// ruta de GET pentru /api/measurements/
 // returneaza toate masuratorile
 Router.get('/', async (req, res) => {
 
@@ -61,7 +81,8 @@ Router.post('/', async (req, res) => {
     const {
         time,
         temperature,
-        humidity
+        humidity,
+        serialNumber
     } = req.body;
 
     // if (Number(temperature) == Nan) {
@@ -71,10 +92,11 @@ Router.post('/', async (req, res) => {
 
     const id = await add(parseFloat(time),
                         parseFloat(temperature), 
-                        parseFloat(humidity));
+                        parseFloat(humidity),
+                        parseInt(serialNumber));
 
     // returnez obiectul sub forma de json
-    res.json({time, temperature, humidity});
+    res.json({time, temperature, humidity, serialNumber});
 
 });
 
