@@ -3,11 +3,13 @@ version: "3.7"
 services:
   measurements-service:
     build: '../'
+    container_name: measurements
+    hostname: measurements
     ports:
       - "3000:80"
     environment:
       NODE_ENV: development
-      PGHOST: db
+      PGHOST: measure_db
       PGUSER: ${PGUSER}
       PGPASSWORD: ${PGPASSWORD}
       PGPORT: 5432
@@ -16,10 +18,12 @@ services:
       - ../:/usr/src/app  
     command: ["npm", "run", "start-dev-docker"]
     networks:
-      - measurements_network
+      - measure_internal
+      - cluster
 
-  db:
+  measure_db:
     image: postgres
+    container_name: measurements_db
     environment:
       POSTGRES_USER: ${PGUSER}
       POSTGRES_PASSWORD: ${PGPASSWORD}
@@ -32,9 +36,9 @@ services:
       - measurements-database:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
-      - measurements_network
+      - measure_internal
 
-  pgadmin:
+  measure-pgadmin:
     image: dpage/pgadmin4
     ports:
       - "30001:80"
@@ -44,10 +48,12 @@ services:
     logging:
       driver: none
     networks:
-      - measurements_network
+      - measure_internal
 
 volumes:
   measurements-database:
 
 networks:
-  measurements_network:
+  measure_internal:
+  cluster:
+    external: true

@@ -14,7 +14,8 @@ const authorize = () => {
         }
 
         const options = {
-            url: `http://${process.env.AUTH_SERVICE}/api/token/authorize`,
+            // url: `http://${process.env.AUTH_SERVICE}/api/token/authorize`,
+            url: `http://auth/api/token/authorize`,
             headers: {
                 'Authorization': req.headers.authorization
             }
