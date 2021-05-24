@@ -23,13 +23,17 @@ const {
 // returneaza datele despre masuratoarea cu id-ul respectiv
 Router.get('/:time', async (req, res) => {
 
-    // preiau parametrul id din parametrii de cerere
+    // preiau parametrul time din parametrii de cerere
     const {
         time
     } = req.params;
 
+    const {
+        serialNumber
+    } = req.state;
+
     // apelez functia din servicii
-    const measurement = await getById(time);
+    const measurement = await getById(serialNumber, time);
 
     // returnez obiectul sub forma de json
     res.json(measurement);
@@ -46,8 +50,12 @@ Router.get('/period/:measurementsNo', async (req, res) => {
         measurementsNo
     } = req.params;
 
+    const {
+        serialNumber
+    } = req.state;
+
     // apelez functia din servicii
-    const measurement = await getCustomMeasurements(measurementsNo);
+    const measurement = await getCustomMeasurements(serialNumber, measurementsNo);
 
     // returnez obiectul sub forma de json
     res.json(measurement);
@@ -64,8 +72,12 @@ Router.get('/', async (req, res) => {
         time
     } = req.params;
 
+    const {
+        serialNumber
+    } = req.state;
+
     // apelez functia din servicii
-    const measurements = await getAll();
+    const measurements = await getAll(serialNumber);
 
     // returnez obiectul sub forma de json
     res.json(measurements);
@@ -100,7 +112,7 @@ Router.post('/', async (req, res) => {
 
 });
 
-Router.put('/:id', async (req, res) => {
+Router.put('/:time', async (req, res) => {
 
     const {
         time
@@ -116,13 +128,17 @@ Router.put('/:id', async (req, res) => {
     res.json({time, temperature, humidity});
 });
 
-Router.delete('/:id', async (req, res) => {
+Router.delete('/:time', async (req, res) => {
 
     const {
         time
     } = req.params;
 
-    await remove(time);
+    const {
+        serialNumber
+    } = req.state;
+
+    await remove(serialNumber, time);
 
     // .end() inchide fluxul de cerere-raspuns
     res.status(200).end();

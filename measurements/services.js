@@ -7,19 +7,23 @@ const {
 
 const { ServerError } = require ('../errors');
 
-const getAll = async () => {
+const getAll = async (serialNumber) => {
     console.info('Get all');
 
-    const measurements = await query('SELECT * from measurements');
+    const measurements = await query('SELECT * from measurements \
+                                        WHERE serialNumber = $1', [serialNumber]);
 
     return measurements;
 };
 
-const getById = async (time) => {
+const getById = async (serialNumber, time) => {
     console.info(`Getting temperature with ${time}`);
 
     const measurements = await query('SELECT * FROM measurements \
-                                        WHERE time = $1', [time]);
+                                        WHERE \
+                                            serialNumber = $1 AND \
+                                            time = $2', [time, serialNumber]);
+
     // din start.js o sa primesc un rows, care este un vector
     // daca lungimea vectorului o sa fie < 1 ==> valoarea nu exista
     if (measurements.length !== 1) {
@@ -29,12 +33,13 @@ const getById = async (time) => {
     return measurements[0];
 };
 
-const getCustomMeasurements = async (measurementsNo) => {
+const getCustomMeasurements = async (serialNumber, measurementsNo) => {
     console.info(`Getting custom number of temperatures ${measurementsNo}`);
 
     const measurements = await query('SELECT * FROM measurements \
+                                        WHERE serialNumber = $1 \
                                         ORDER BY time DESC \
-                                        LIMIT $1', [measurementsNo]);
+                                        LIMIT $2', [serialNumber, measurementsNo]);
 
     return measurements;
 };
