@@ -1,7 +1,12 @@
 // au rolul de a descrie logica de rutare si de verificare a parametrilor
 
+
 // pentru creeare rute
 const Router = require('express').Router();
+
+const {
+    authorize
+} = require('../authorization');
 
 // importarea clasei de erori 
 const {
@@ -21,7 +26,7 @@ const {
 // pentru a creea un CRUD: GET, POST, DELETE, PUT
 // ruta de GET pentru /api/measurements/:id
 // returneaza datele despre masuratoarea cu id-ul respectiv
-Router.get('/:time', async (req, res) => {
+Router.get('/:time', authorize(), async (req, res) => {
 
     // preiau parametrul time din parametrii de cerere
     const {
@@ -43,7 +48,7 @@ Router.get('/:time', async (req, res) => {
 
 // ruta de GET pentru /api/measurements/period/:no
 // returneaza datele despre masuratoarea cu id-ul respectiv
-Router.get('/period/:measurementsNo', async (req, res) => {
+Router.get('/period/:measurementsNo', authorize(), async (req, res) => {
 
     // preiau parametrul id din parametrii de cerere
     const {
@@ -65,12 +70,7 @@ Router.get('/period/:measurementsNo', async (req, res) => {
 
 // ruta de GET pentru /api/measurements/
 // returneaza toate masuratorile
-Router.get('/', async (req, res) => {
-
-    // preiau parametrul id din parametrii de cerere
-    const {
-        time
-    } = req.params;
+Router.get('/', authorize(), async (req, res) => {
 
     const {
         serialNumber
@@ -128,7 +128,7 @@ Router.put('/:time', async (req, res) => {
     res.json({time, temperature, humidity});
 });
 
-Router.delete('/:time', async (req, res) => {
+Router.delete('/:time', authorize(), async (req, res) => {
 
     const {
         time

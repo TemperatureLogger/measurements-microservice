@@ -11,7 +11,7 @@ const getAll = async (serialNumber) => {
     console.info('Get all');
 
     const measurements = await query('SELECT * from measurements \
-                                        WHERE serialNumber = $1', [serialNumber]);
+                                        WHERE serialnumber = $1', [serialNumber]);
 
     return measurements;
 };
@@ -21,7 +21,7 @@ const getById = async (serialNumber, time) => {
 
     const measurements = await query('SELECT * FROM measurements \
                                         WHERE \
-                                            serialNumber = $1 AND \
+                                            serialnumber = $1 AND \
                                             time = $2', [time, serialNumber]);
 
     // din start.js o sa primesc un rows, care este un vector
@@ -37,7 +37,7 @@ const getCustomMeasurements = async (serialNumber, measurementsNo) => {
     console.info(`Getting custom number of temperatures ${measurementsNo}`);
 
     const measurements = await query('SELECT * FROM measurements \
-                                        WHERE serialNumber = $1 \
+                                        WHERE serialnumber = $1 \
                                         ORDER BY time DESC \
                                         LIMIT $2', [serialNumber, measurementsNo]);
 
@@ -49,12 +49,14 @@ const add = async (time, temperature, humidity, serialNumber) => {
 
     try {
         const measurements = await query (`INSERT INTO measurements \
-                                            (time, temperature, humidity, serialNumber) \
+                                            (time, temperature, humidity, serialnumber) \
                                             VALUES ($1, $2, $3, $4) RETURNING time`, 
                                             [time, temperature, humidity, serialNumber]);
         return measurements[0].time;
     } catch (e) {
-        throw e;
+        if (e.code === '23505') {
+            throw new ServerError(`There is already an entry added at time ${time}!`, 409);
+        }
     }
 };
 
