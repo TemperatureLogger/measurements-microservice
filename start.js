@@ -63,6 +63,6 @@ app.use((err, req, res, next) => {
 const port = process.env.PORT || 80;
  
 // deschiderea serverului pe portul stabilit
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
     console.log(`App is listening on ${port} and running on ${process.env.NODE_ENV} mode`);
 });
